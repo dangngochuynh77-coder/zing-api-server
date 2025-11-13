@@ -1,6 +1,11 @@
 import express from "express";
 import cors from "cors";
 import { ZingMp3 } from "zingmp3-api-full";
+import ffmpeg from "fluent-ffmpeg";
+import ffmpegPath from "ffmpeg-static";
+
+ffmpeg.setFfmpegPath(ffmpegPath);
+
 
 const app = express();
 app.use(cors());
