@@ -1,0 +1,15 @@
+{
+  "name": "zingmp3-api-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "zingmp3-api-full": "^1.0.14",
+    "cors": "^2.8.5"
+  }
+}
