@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Zing API Server is running!");
+  res.send("Zing MP3 API Server is running!");
 });
 
 // ================================
@@ -20,9 +20,24 @@ app.get("/", (req, res) => {
 app.get("/api/search", async (req, res) => {
   try {
     const q = req.query.q;
-    if (!q) return res.json({ error: "missing q" });
+    if (!q) return res.json({ error: "Missing q" });
 
     const data = await ZingMp3.search(q);
+    res.json(data);
+  } catch (e) {
+    res.json({ error: e.toString() });
+  }
+});
+
+// ================================
+// SONG INFO API
+// ================================
+app.get("/api/song", async (req, res) => {
+  try {
+    const id = req.query.id;
+    if (!id) return res.json({ error: "Missing id" });
+
+    const data = await ZingMp3.getSong(id);
     res.json(data);
   } catch (e) {
     res.json({ error: e.toString() });
@@ -45,14 +60,12 @@ app.get("/api/lyric", async (req, res) => {
 });
 
 // ================================
-// STREAM MP3 (Convert m3u8 -> MP3)
+// STREAM MP3 (Convert HLS m3u8 -> MP3 realtime)
 // ================================
 app.get("/api/stream", async (req, res) => {
   try {
     const id = req.query.id;
-    if (!id) {
-      return res.status(400).json({ error: "Missing id" });
-    }
+    if (!id) return res.status(400).json({ error: "Missing id" });
 
     console.log("[STREAM] Request ID =", id);
 
@@ -86,7 +99,7 @@ app.get("/api/stream", async (req, res) => {
 
     cmd.pipe(res, { end: true });
   } catch (e) {
-    console.log("[STREAM] Exception:", e);
+    console.error("[STREAM] Exception:", e);
     res.json({ error: e.toString() });
   }
 });
